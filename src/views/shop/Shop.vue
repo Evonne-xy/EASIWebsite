@@ -14,10 +14,8 @@
     <div class="infoCard">
       <shopInfo :shopItem="shopInfo.item" :hideBorder="true" v-show = "shopInfo.item.imgSrc"></shopInfo>
     </div>
-
-    <div class="wrapper-bottom">
-      <shopContent></shopContent>
-    </div>
+      <shop-content></shop-content>
+      <shop-cart></shop-cart>
   </div>
 </template>
 
@@ -26,7 +24,8 @@ import { useRouter, useRoute } from 'vue-router'
 import { reactive } from 'vue'
 import shopInfo from '../../components/Shop/ShopInfo.vue'
 import { get } from '../../utils/request.js'
-import shopContent from '../../components/Shop/shopContent.vue'
+import ShopContent from '../../components/Shop/shopContent.vue'
+import ShopCart from '../../components/Shop/shopCart.vue'
 
 //get the shopDetails
 const useShopInfoEffect = () => {
@@ -53,7 +52,7 @@ const useBackRouterEffect = () => {
 
 export default {
   name: 'Shop',
-  components: { shopInfo,shopContent },
+  components: { shopInfo, ShopCart, ShopContent },
   setup() {
     const { shopInfo, getShopInfo } = useShopInfoEffect()
     getShopInfo()

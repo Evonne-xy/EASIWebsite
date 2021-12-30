@@ -2,8 +2,11 @@
   <div class="content">
     <div class="content_left">
       <div
-        class="content_left_item"
-        v-for="(item, index) in leftItem"
+        :class="{
+          'content_left_item': true,
+          'content_left_item--active': item.tab === currentTab,
+        }"
+        v-for="(item, index) in categories"
         :key="index"
         @click="handleLeftItemClick(item.tab)"
       >
@@ -36,29 +39,49 @@
 </template>
 
 <script>
-import { reactive, toRefs } from 'vue'
+import { reactive, toRefs, ref, watchEffect } from 'vue'
+import { useRoute } from 'vue-router'
 import { get } from '../../utils/request.js'
+
+//define the categories name
+const categories = reactive([
+  { name: 'All item', tab: 'all' },
+  { name: 'Drinks', tab: 'Drinks' },
+  { name: 'Fruit & veg', tab: 'Fruit' },
+  { name: 'Meat, Seafood & Deli', tab: 'Meat' },
+  { name: 'Health & Beauty', tab: 'Health' },
+])
+
+//change the tab value, when user click
+const useTabEffect = () => {
+  const currentTab = ref(categories[0].tab)
+  const handleLeftItemClick = (tab) => {
+    currentTab.value = tab
+  }
+  return { currentTab, handleLeftItemClick }
+}
+
+//get shopItem and show it
+const useShopDetailEffect = (tab) => {
+  const route = useRoute()
+  const rightItem = reactive({ contentList: [] })
+
+  //get item detail
+  const getShopDetail = async () => {
+    const response = await get(`/api/shop/${route.params.shopId}/items`, {tab: tab.value,})
+    rightItem.contentList = response.data
+  }
+  const { contentList } = toRefs(rightItem)
+  //using watchEffect to listen it, when the tab change, the methods will execute it
+  watchEffect(() => {getShopDetail()})
+  return { contentList }
+}
+
 export default {
   setup() {
-    const leftItem = reactive([
-      { name: 'All item', tab: 'all' },
-      { name: 'Drinks', tab: 'Drinks' },
-      { name: 'Fruit & veg', tab: 'Fruit' },
-      { name: 'Meat, Seafood & Deli', tab: 'Meat' },
-      { name: 'Health & Beauty', tab: 'Health' },
-    ])
-    const rightItem = reactive({ contentList: [] })
-    const getShopDetail = async (tab) => {
-      if(tab === ''){tab = 'all'}  
-      const response = await get('/api/shop/1/items', {tab})
-      rightItem.contentList = response.data
-    }
-    getShopDetail('all')
-    const handleLeftItemClick = (tab) => {
-          getShopDetail(tab)
-    }
-    const { contentList } = toRefs(rightItem)
-    return { leftItem, contentList,handleLeftItemClick }
+    const { currentTab, handleLeftItemClick } = useTabEffect()
+    const { contentList } = useShopDetailEffect(currentTab)
+    return { categories, contentList, handleLeftItemClick, currentTab }
   },
 }
 </script>
