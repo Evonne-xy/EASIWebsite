@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Actor&display=swap');
+@font-face {
+  font-family: 'iconfont';  /* Project id 3029545 */
+  src: url('//at.alicdn.com/t/font_3029545_r619juw8g1.woff2?t=1640575648046') format('woff2'),
+       url('//at.alicdn.com/t/font_3029545_r619juw8g1.woff?t=1640575648046') format('woff'),
+       url('//at.alicdn.com/t/font_3029545_r619juw8g1.ttf?t=1640575648046') format('truetype');
+}
+  .iconfont {
+    font-family: 'iconfont' !important;
+    font-size: 16px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
