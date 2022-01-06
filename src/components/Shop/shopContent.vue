@@ -29,12 +29,14 @@
           <p class="item_cupPrice">&dollar;{{ item.sales }}</p>
         </div>
         <div class="item_number">
-          <span class="item_number_minus">-</span>
-          0
-          <span class="item_number_plus">+</span>
+          <span class="item_number_minus" @click = "reduceItemToCart(shopId,item.id,item)" >-</span>
+          {{ cartList?.[shopId]?.[item.id]?.count || 0 }}
+          <!-- {{item.count || 0}} -->
+          <span class="item_number_plus" @click="addItemToCart(shopId, item.id, item)">+</span>
         </div>
       </div>
     </div>
+    <base-toast v-if="toastData.show">{{ toastData.error }}</base-toast>
   </div>
 </template>
 
@@ -42,6 +44,8 @@
 import { reactive, toRefs, ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import { get } from '../../utils/request.js'
+import { useToastEffect } from '../../components/UI/BaseToast.vue'
+import { useCartEffect } from  './useCartEffect.js'
 
 //define the categories name
 const categories = reactive([
@@ -68,20 +72,40 @@ const useShopDetailEffect = (tab) => {
 
   //get item detail
   const getShopDetail = async () => {
-    const response = await get(`/api/shop/${route.params.shopId}/items`, {tab: tab.value,})
+    const response = await get(`/api/shop/${route.params.shopId}/items`, {
+      tab: tab.value,
+    })
     rightItem.contentList = response.data
   }
   const { contentList } = toRefs(rightItem)
+  console.log(contentList)
   //using watchEffect to listen it, when the tab change, the methods will execute it
-  watchEffect(() => {getShopDetail()})
+  watchEffect(() => {
+    getShopDetail()
+  })
   return { contentList }
 }
 
 export default {
   setup() {
+    const route = useRoute()
+    const shopId = route.params.shopId
+    const { toastData, showToast } = useToastEffect()
     const { currentTab, handleLeftItemClick } = useTabEffect()
     const { contentList } = useShopDetailEffect(currentTab)
-    return { categories, contentList, handleLeftItemClick, currentTab }
+    const { cartList, addItemToCart, reduceItemToCart } = useCartEffect(showToast)
+    return {
+      categories,
+      contentList,
+      handleLeftItemClick,
+      currentTab,
+      cartList,
+      shopId,
+      addItemToCart,
+      reduceItemToCart,
+      toastData,
+      showToast
+    }
   },
 }
 </script>
@@ -158,7 +182,7 @@ export default {
   line-height: 0.2rem;
   margin: 0.06rem 0;
   font-size: 0.16rem;
-  color: #e93b3b;
+  color: $hightLight-fontColor;
 }
 
 .item_price .item_centsValue {

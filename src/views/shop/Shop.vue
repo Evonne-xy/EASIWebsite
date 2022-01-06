@@ -125,7 +125,6 @@ export default {
 .infoCard {
   position: absolute;
   top: 0.7rem;
-  z-index: 999;
   border-radius: 12px;
   box-shadow: 1px 2px 3px 3px rgba(189, 189, 189, 0.26);
   background-color: white;
