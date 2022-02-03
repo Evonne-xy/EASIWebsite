@@ -9,6 +9,7 @@ This is a mock EASI app and use the vue framework
 # shopping-website
 
 如果使用PC端进入网站，推荐使用chrome浏览器，并且使用inspect 切换成手机模式，如下图：
+
  ![RecoReview](./ReadmeImgs/RecoReview.png)
 
 项目功能： 
@@ -43,8 +44,10 @@ This is a mock EASI app and use the vue framework
    ![orderComfirmation](./ReadmeImgs/orderComfirmation.png)
    ![orderComfirmation](./ReadmeImgs/orderComfirmation2.png)
    ![orderComfirmation](./ReadmeImgs/orderList.png)
+
 5. 购物车页面
     购物车可以显示你加入的商品，并且如果商品数量超过3个，会将商品隐藏起来，当用户点击后，会显示所以的商品
+    
 ![cartList](./ReadmeImgs/cartList.png)
 ![cartList2](./ReadmeImgs/cartList2.png)
 
