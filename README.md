@@ -8,6 +8,9 @@ This is a mock EASI app and use the vue framework
 =======
 # shopping-website
 
+如果使用PC端进入网站，推荐使用chrome浏览器，并且使用inspect 切换成手机模式，如下图：
+ ![RecoReview](./ReadmeImgs/RecoReview.png)
+
 项目功能： 
 1. 登陆注册（当你进入界面时，会让你登录，登录输入任何用户名和密码都可以登录成功）
    ![login](./ReadmeImgs/logIn.png)
@@ -16,6 +19,7 @@ This is a mock EASI app and use the vue framework
 
 2. 首页展示 
    进入首页后，会展示不同的商家页面，可以点击进去查看不同商家的商品，这里有商品内容商家分别为Costco,WoolWorths.
+
    ![HomePage](./ReadmeImgs/HomePage.png)
 
 
@@ -38,7 +42,7 @@ This is a mock EASI app and use the vue framework
 
    ![orderComfirmation](./ReadmeImgs/orderComfirmation.png)
    ![orderComfirmation](./ReadmeImgs/orderComfirmation2.png)
-
+   ![orderComfirmation](./ReadmeImgs/orderList.png)
 5. 购物车页面
     购物车可以显示你加入的商品，并且如果商品数量超过3个，会将商品隐藏起来，当用户点击后，会显示所以的商品
 ![cartList](./ReadmeImgs/cartList.png)
