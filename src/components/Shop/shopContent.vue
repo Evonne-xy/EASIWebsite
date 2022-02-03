@@ -29,10 +29,9 @@
           <p class="item_cupPrice">&dollar;{{ item.sales }}</p>
         </div>
         <div class="item_number">
-          <span class="item_number_minus" @click = "reduceItemToCart(shopId,item.id,item)" >-</span>
-          {{ cartList?.[shopId]?.[item.id]?.count || 0 }}
-          <!-- {{item.count || 0}} -->
-          <span class="item_number_plus" @click="addItemToCart(shopId, item.id, item)">+</span>
+          <span class="item_number_minus" @click = "reduceCartItem(shopId,item.id,item,shopName)" >-</span>
+          {{ cartList?.[shopId]?.productList?.[item.id]?.count || 0 }}
+          <span class="item_number_plus" @click="AddCartItem(shopId, item.id, item,shopName)">+</span>
         </div>
       </div>
     </div>
@@ -43,9 +42,10 @@
 <script>
 import { reactive, toRefs, ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
+import { useStore } from 'vuex'
 import { get } from '../../utils/request.js'
 import { useToastEffect } from '../../components/UI/BaseToast.vue'
-import { useCartEffect } from  './useCartEffect.js'
+import { useCartEffect } from '../../effects/cartEffects.js'
 
 //define the categories name
 const categories = reactive([
@@ -86,14 +86,39 @@ const useShopDetailEffect = (tab) => {
   return { contentList }
 }
 
+//The logic User click + and - button
+const ChangeChartEffect = () => {
+  const store = useStore()
+  const { toastData, showToast } = useToastEffect()
+  const { cartList, addItemToCart, reduceItemToCart } = useCartEffect(showToast)
+  const changeShopName = (shopId,shopName) => {
+      store.commit('changeShopName',{shopId,shopName})
+    }
+
+    const AddCartItem = (shopId,itemId,item,shopName) => {
+      addItemToCart(shopId, itemId, item)
+      changeShopName(shopId, shopName)
+    }
+
+    const reduceCartItem = (shopId,itemId,item,shopName) => {
+      reduceItemToCart(shopId, itemId, item)
+      changeShopName(shopId, shopName)
+    }
+    return { toastData,showToast, cartList,AddCartItem,reduceCartItem }
+}
+
+
 export default {
+  props:['shopName'],
   setup() {
     const route = useRoute()
+
     const shopId = route.params.shopId
-    const { toastData, showToast } = useToastEffect()
+    
     const { currentTab, handleLeftItemClick } = useTabEffect()
     const { contentList } = useShopDetailEffect(currentTab)
-    const { cartList, addItemToCart, reduceItemToCart } = useCartEffect(showToast)
+    const { toastData,showToast, cartList,AddCartItem,reduceCartItem } = ChangeChartEffect()
+
     return {
       categories,
       contentList,
@@ -101,8 +126,8 @@ export default {
       currentTab,
       cartList,
       shopId,
-      addItemToCart,
-      reduceItemToCart,
+      AddCartItem,
+      reduceCartItem,
       toastData,
       showToast
     }
@@ -187,7 +212,7 @@ export default {
 
 .item_price .item_centsValue {
   font-size: 0.12rem;
-  transform: translateY(-8px);
+  transform: translateY(-0.08rem);
   display: inline-block;
 }
 
@@ -202,7 +227,7 @@ export default {
 .content_right_item .item_number {
   position: absolute;
   right: 0rem;
-  bottom: 0.12rem;
+  bottom: 0.11rem;
 }
 
 .content_right_item .item_number .item_number_minus,

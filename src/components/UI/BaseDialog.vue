@@ -1,9 +1,11 @@
 <template>
-  <div @click="$emit('close')">
-    <dialog open>
-      <header v-if="$slots.header">
+<teleport to="body">
+  <div v-if="show" class="backdrop"> </div>
+    <dialog open v-if = "show">
+      <div class = "content">
+        <header>
         <slot name="header">
-          <h2>{{ title }}</h2>
+          <h2>{{title}}</h2>
         </slot>
       </header>
       <section>
@@ -11,63 +13,70 @@
       </section>
       <menu>
         <slot name="actions">
-          <base-button @click="$emit('close')">Close</base-button>
         </slot>
       </menu>
+      </div>
     </dialog>
-  </div>
+  </teleport>
 </template>
 
 <script>
 export default {
   props: {
+    show: {
+      type: Boolean,
+      required: true,
+    },
     title: {
       type: String,
       required: true,
     },
   },
-  emits: ['close'],
+  emits: ['close']
 }
 </script>
 
 
 <style lang= 'scss' scoped>
 @import '../../style/variable.scss';
-dialog {
-  position: fixed;
-  /* top: 30vh;
-  left: 10%;
-  width: 80%; */
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  height: 30%;
-  width: 80%;
-  z-index: 100;
-  border-radius: 12px;
-  border: none;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
-  padding: 0;
-  margin: 0;
-  overflow: hidden;
-}
-
-div {
+.backdrop {
   position: fixed;
   top: 0;
   left: 0;
-  height: 100vh;
-  width: 100vh;
+  height: 100%;
+  width: 100%;
   background-color: rgba(0, 0, 0, 0.75);
-  z-index: 1;
   pointer-events: none;
+  z-index: 10;
+}
+
+dialog {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 0.12rem;
+  border: none;
+  box-shadow: 0 0.02rem 0.08rem rgba(0, 0, 0, 0.26);
+  padding: 0;
+  z-index:100;
+  margin: 0;
+  overflow: hidden;
+  background-color:#fff
+}
+
+.content{
+  width:3rem;
+  height:1.56rem;
+  background-color:#fff;
+  text-align:center;
 }
 
 header {
-  background-color: $content_labelColor;
-  color: white;
-  width: 100%;
-  padding: 1rem;
+  color: #333;
+  font-size:0.16rem;
+  margin-top:0.24rem 0 0.08rem 0;
+  line-height:0.26rem
 }
 
 menu {
@@ -78,6 +87,8 @@ menu {
 }
 
 section {
-  padding: 0.1rem;
+  margin-top:0.24rem 0 0.08rem 0;
+ font-size:0.14rem;
+  color:#666;
 }
 </style>

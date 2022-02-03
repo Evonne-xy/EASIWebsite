@@ -1,12 +1,12 @@
 <template>
-    <button :class="mode">
+    <button :class="mode" :style = "widthStyle">
       <slot></slot>
     </button>
 </template>
 
 <script>
 export default {
-  props: ['mode'],
+  props: ['mode','widthStyle'],
 }
 </script>
 
@@ -21,21 +21,17 @@ button {
   text-align: center;
   font-size: 0.16rem;
   padding:0  0.1rem;
-  border:none
+  border:none;
 }
 button:hover,
 button:active {
-  background-color: #eed919;
+  background-color: $content_labelColor;
 }
 
 .flat {
+  box-sizing: border-box;
   background-color: transparent;
-  color: $content_labelColor;
-  border: none;
+
 }
 
-.flat:hover,
-.flat:active {
-  text-decoration: underline;
-}
 </style>

@@ -33,7 +33,7 @@ export default {
 }
 
 .bordered {
-    border-bottom: 1px solid $content_bgColor;
+    border-bottom: 0.01rem solid $content_bgColor;
 }
 
 .shop_item .shop_item_img {

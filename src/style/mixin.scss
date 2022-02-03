@@ -1,5 +1,26 @@
-@mixin ellipsis{
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
+@mixin ellipsis {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+@mixin wrapper {
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0.5rem;
+  width: 100%;
+  position: absolute;
+  border-top: 0.01rem solid $content_bgColor;
+  box-sizing: border-box;
+  color: $content_fontColor;
+  // overflow-y: auto;
+}
+
+@mixin title {
+  line-height: 0.44rem;
+  background: $bgColor;
+  font-size: 0.16rem;
+  color: $content_fontColor;
+  text-align: center;
 }

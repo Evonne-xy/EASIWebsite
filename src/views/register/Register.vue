@@ -111,8 +111,8 @@ export default {
   padding: 0rem 0.16rem;
   box-sizing: border-box;
   background-color: #f9f9f9;
-  border: 1px solid $content_notice_fontColor;
-  border-radius: 6px;
+  border: 0.01rem solid $content_notice_fontColor;
+  border-radius: 0.06rem;
 }
 
 .wrapper .wrapper_input .wrapper_input_content {

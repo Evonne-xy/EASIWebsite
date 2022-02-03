@@ -118,7 +118,7 @@ export default {
 }
 ::placeholder {
     font-size: 1em;
-    padding: 5px;
+    padding: 0.05rem;
 }
 
 .search .search-icon {
@@ -127,7 +127,7 @@ export default {
 }
 
 .banner {
-    height: 0px;
+    height: 0rem;
     overflow: hidden;
     padding-bottom: 36.75%;
 }

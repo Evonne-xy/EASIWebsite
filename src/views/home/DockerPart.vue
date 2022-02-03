@@ -1,17 +1,18 @@
 <template>
   <div class="docker">
-    <div class="gap"></div>
     <div
       v-for="(item, index) in footerList"
       :key="item.icon"
       class="docker__item"
     >
+    <router-link :to='item.to'>
       <div
         class="iconfont"
-        :class="{ 'iconfont--active': index === 0 }"
+        :class="{ 'iconfont--active': index === currentIndex }"
         v-html="item.icon"
       ></div>
       <div class="docker_title">{{ item.text }}</div>
+      </router-link>
     </div>
   </div>
 </template>
@@ -19,12 +20,13 @@
 <script>
 export default {
   name: 'dockerPart',
+  props:['currentIndex'],
   setup() {
     const footerList = [
-      { icon: '&#xe68d;', text: 'Home' },
-      { icon: '&#xe67c;', text: 'Cart' },
-      { icon: '&#xe603;', text: 'Orders' },
-      { icon: '&#xe655;', text: 'Account' },
+      { icon: '&#xe68d;', text: 'Home' , to: {name:'Home'}},
+      { icon: '&#xe67c;', text: 'Cart' , to: {name:'CartList'}},
+      { icon: '&#xe603;', text: 'Orders', to: {name:'OrderList'}},
+      { icon: '&#xe655;', text: 'Account', to: {name:'Home'}},
     ]
     return { footerList }
   },
@@ -41,11 +43,12 @@ export default {
   position: fixed;
   margin-top: 0.1rem;
   height: 0.49rem;
-  border-top: 1px solid $content_bgColor;
+  border-top: 0.01rem solid $content_bgColor;
   display: flex;
   padding: 0 0.18rem;
   box-sizing: border-box;
   color: $content_fontColor;
+  background-color:$bgColor
 }
 .docker__item {
   flex: 1;
@@ -60,8 +63,13 @@ export default {
   color: $content_labelColor;
 }
 
+a{ 
+  color: $content_fontColor;
+  text-decoration: none;
+}
+
 .docker_title {
-  font-size: 20px;
+  font-size: 0.2rem;
   transform: scale(0.5, 0.5);
   transform-origin: center top;
   font-family: 'Actor', sans-serif;

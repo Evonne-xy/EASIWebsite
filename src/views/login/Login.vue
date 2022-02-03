@@ -17,7 +17,6 @@
           placeholder="Password"
           v-model="user.password"
         />
-        />
       </div>
       <div class="wrapper_login-button" @click="handleLogin">Login</div>
       <div class="wrapper_login-link" @click="handleSignUp">Sign up</div>
@@ -126,15 +125,16 @@ export default {
   padding: 0rem 0.16rem;
   box-sizing: border-box;
   background-color: #f9f9f9;
-  border: 1px solid $content_notice_fontColor;
-  border-radius: 6px;
+  border: 0.01rem solid $content_notice_fontColor;
+  border-radius: 0.06rem;
 }
 
 .wrapper .wrapper_input .wrapper_input_content {
   width: 100%;
   border: none;
   outline: none;
-  line-height: 0.48rem;
+  margin-top:0.12rem;
+  line-height: 0.22rem;
   background: none;
   font-size: 0.16rem;
   color: $content_notice_fontColor;

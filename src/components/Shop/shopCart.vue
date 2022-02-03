@@ -1,13 +1,19 @@
 <template>
-<div class = "mask" v-if = "showCart"></div>
+  <div
+    class="mask"
+    v-if="showCart && calculations.totalCount > 0"
+    @click="handleShowCartChange"
+  ></div>
   <div class="container">
-    <div class="product" v-if = "showCart">
+    <div class="product" v-if="showCart && calculations.totalCount > 0">
       <div class="product_header">
         <div class="product_header_all">
           <span
             class="product_header_icon iconfont"
-            :class="IfAllCheck? 'item_checkedActive': 'item_checkedNoActive'"
-            @click = "handleAllCheckClick">&#xe618;</span>
+            :class="IfAllCheck ? 'item_checkedActive' : 'item_checkedNoActive'"
+            @click="handleAllCheckClick"
+            >&#xe618;</span
+          >
           <span class="product_header_text">All</span>
         </div>
         <div class="product_header_clear" @click="cleanCartProducts(shopId)">
@@ -54,16 +60,23 @@
     </div>
     <div class="check">
       <div class="check_icon">
-        <img src="../../img/cart.png" class="check_icon_img" @click = "handleShowCartChange"/>
-        <div class="check_icon_tag">{{ totalCount }}</div>
+        <img
+          src="../../img/cart.png"
+          class="check_icon_img"
+          @click="handleShowCartChange"
+        />
+        <div class="check_icon_tag">{{ calculations.totalCount }}</div>
       </div>
 
       <div class="check_info">
         Total:<span class="check_info_price"
-          >&nbsp; &dollar;&nbsp;{{ totalPrice }}</span
+          >&nbsp; &dollar;&nbsp;{{ calculations.totalPrice }}</span
         >
       </div>
-      <div class="check_button"><base-button>Check out</base-button></div>
+      <div class="check_button" v-show = "calculations.totalCount > 0">
+        <router-link :to="{ path: `/orderConfirmation/${shopId}` }"
+          ><base-button>Check out</base-button></router-link>
+      </div>
     </div>
   </div>
   <base-toast v-if="toastData.show">{{ toastData.error }}</base-toast>
@@ -73,7 +86,7 @@
 import { ref, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
-import { useCartEffect } from './useCartEffect.js'
+import { useCartEffect } from '../../effects/cartEffects.js'
 import { useToastEffect } from '../../components/UI/BaseToast.vue'
 //Logic of getting cart info
 const ChangeCartEffect = (shopId) => {
@@ -81,48 +94,14 @@ const ChangeCartEffect = (shopId) => {
   const cartList = store.state.cartList
   const allCheck = ref(true)
 
-  //Get the cartList value from store
-  const userAddCartList = computed(() => {
-    const productList = cartList[shopId] || []
-    return productList
-  })
-
-//if user add or remove, the icon number will change 
-  const totalCount = computed(() => {
-    const productList = cartList[shopId]
-    let total = 0
-    if (productList) {
-      for (let i in productList) {
-        const product = productList[i]
-        total += product.count
-      }
-    }
-    return total
-  })
-
-//Calculate total price
-  const totalPrice = computed(() => {
-    const productList = cartList[shopId]
-    let price = 0
-    if (productList) {
-      for (let i in productList) {
-        const product = productList[i]
-        if (product.check) {
-          price += product.price * product.count
-        }
-      }
-    }
-    return price.toFixed(2)
-  })
-
- //User click item check button, The store will reverse the check value
+  //User click item check button, The store will reverse the check value
   const handleCheckClick = (item) => {
     store.commit('handleCheckClick', { item })
   }
 
- //The Logic of all check button style.使用computed, 如果里面的productList, allCheck发生改变，这个方法就会执行，同样check style也会变化
+  //The Logic of all check button style.使用computed, 如果里面的productList, allCheck发生改变，这个方法就会执行，同样check style也会变化
   const IfAllCheck = computed(() => {
-    const productList = cartList[shopId]
+    const productList = cartList[shopId]?.productList
     allCheck.value = true //这里将他设置为true, 目的是当你把某个item前的对勾点掉后，由于是computed会重新执行这个方法，每当变化的时候，都会将allcheck值先为true，再去判断是否要将他置为false。好处是为了避免，你最后把下面的所有勾都打上了，他的全选图标会变
     for (let i in productList) {
       const product = productList[i]
@@ -133,52 +112,52 @@ const ChangeCartEffect = (shopId) => {
     return allCheck.value
   })
 
-//The logic of user click all check button
-  const handleAllCheckClick = ()=> {
+  //The logic of user click all check button
+  const handleAllCheckClick = () => {
     allCheck.value = !allCheck.value
-    store.commit('handleAllCheckClick', { shopId,allCheck })
+    store.commit('handleAllCheckClick', { shopId, allCheck })
   }
 
-// clean cart
+  // clean cart
   const cleanCartProducts = (shopId) => {
     store.commit('cleanCartProducts', { shopId })
   }
 
   return {
-    totalCount,
-    totalPrice,
-    userAddCartList,
     IfAllCheck,
     cleanCartProducts,
     handleCheckClick,
-    handleAllCheckClick
+    handleAllCheckClick,
   }
+}
+
+//Toggle cart
+const cartToggleEffect = () => {
+  const showCart = ref(false)
+
+  const handleShowCartChange = () => {
+    showCart.value = !showCart.value
+  }
+  return { showCart, handleShowCartChange }
 }
 
 export default {
   setup() {
     const route = useRoute()
     const shopId = route.params.shopId
-    const showCart = ref(false)
-
-    const handleShowCartChange = () => {
-      showCart.value = !showCart.value
-    }
 
     const {
-      totalCount,
-      totalPrice,
-      userAddCartList,
       IfAllCheck,
       handleCheckClick,
       handleAllCheckClick,
       cleanCartProducts,
     } = ChangeCartEffect(shopId)
+    const { showCart, handleShowCartChange } = cartToggleEffect()
     const { toastData, showToast } = useToastEffect()
-    const { addItemToCart, reduceItemToCart } = useCartEffect(showToast)
+    const { userAddCartList,calculations,addItemToCart,reduceItemToCart } =
+      useCartEffect(showToast, shopId)
     return {
-      totalCount,
-      totalPrice,
+      calculations,
       userAddCartList,
       shopId,
       toastData,
@@ -189,7 +168,7 @@ export default {
       handleAllCheckClick,
       handleCheckClick,
       cleanCartProducts,
-      handleShowCartChange
+      handleShowCartChange,
     }
   },
 }
@@ -198,14 +177,14 @@ export default {
 <style lang = "scss" scoped>
 @import '../../style/variable.scss';
 @import '../../style/mixin.scss';
-.mask{
+.mask {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  top:0;
-  background-color:rgba(0, 0, 0, 0.75);
-  z-index:1
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  z-index: 1;
 }
 .container {
   position: fixed;
@@ -213,8 +192,8 @@ export default {
   left: 0;
   right: 0;
   margin: 0;
-  background-color: #fff;
-  z-index:2
+  background-color: $bgColor;
+  z-index: 2;
 }
 .product {
   overflow-y: scroll;
@@ -223,26 +202,26 @@ export default {
 
 .product_header {
   line-height: 0.52rem;
-  border-bottom: 1px solid $content_bgColor;
+  border-bottom: 0.01rem solid $content_bgColor;
   display: flex;
 }
 .product_header .product_header_all {
   width: 0.64rem;
   margin-left: 0.18rem;
+  flex: 1;
 }
 
 .product_header .product_header_clear {
-  flex: 1;
   text-align: right;
   font-size: 0.14rem;
-  color: #333;
+  color: $content_fontColor;
   margin-right: 0.16rem;
 }
 
 .product_header .product_header_icon {
   font-size: 0.16rem;
-  display:inline-block;
-  line-height:0.54rem;
+  display: inline-block;
+  line-height: 0.54rem;
   vertical-align: top;
 }
 
@@ -301,7 +280,7 @@ export default {
 
 .item_price .item_centsValue {
   font-size: 0.12rem;
-  transform: translateY(-8px);
+  transform: translateY(-0.08rem);
   display: inline-block;
 }
 
@@ -316,7 +295,7 @@ export default {
 .product_item .item_number {
   position: absolute;
   right: 0rem;
-  bottom: 0.12rem;
+  bottom: 0.11rem;
 }
 
 .product_item .item_number .item_number_minus,

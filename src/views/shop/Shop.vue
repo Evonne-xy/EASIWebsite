@@ -14,7 +14,7 @@
     <div class="infoCard">
       <shopInfo :shopItem="shopInfo.item" :hideBorder="true" v-show = "shopInfo.item.imgSrc"></shopInfo>
     </div>
-      <shop-content></shop-content>
+      <shop-content :shopName = "shopInfo.item.title"></shop-content>
       <shop-cart></shop-cart>
   </div>
 </template>
@@ -64,14 +64,24 @@ export default {
 
 <style lang = "scss" scoped>
 @import '../../style/variable.scss';
+@import '../../style/mixin.scss';
 .wrapper {
-  height: 100vh;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  position: absolute;
 }
 
 .wrapper-top {
   opacity: 0.8;
   z-index: 1;
-  background-color: $content_labelColor;
+  background-image: linear-gradient(
+    0deg,
+    rgba(0, 145, 255, 0) 4%,
+    $content_labelColor 50%
+  );
   height: 25vh;
 }
 
@@ -125,8 +135,8 @@ export default {
 .infoCard {
   position: absolute;
   top: 0.7rem;
-  border-radius: 12px;
-  box-shadow: 1px 2px 3px 3px rgba(189, 189, 189, 0.26);
+  border-radius: 0.12rem;
+  box-shadow: 0.01rem 0.02rem 0.03rem 0.03rem rgba(189, 189, 189, 0.26);
   background-color: white;
   width: 90%;
   left: 50%;

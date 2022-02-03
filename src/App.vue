@@ -13,5 +13,6 @@ export default {
     height: 0.1rem;
     background-color: $content_bgColor;
     margin: 0 -0.18rem;
+
 }
 </style>

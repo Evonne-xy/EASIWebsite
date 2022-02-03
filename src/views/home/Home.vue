@@ -3,7 +3,7 @@
     <div class="wrapper">
       <topPart></topPart>
       <nearby></nearby>
-      <dockerPart></dockerPart>
+      <docker-part :currentIndex = "0"></docker-part>
     </div>
   </div>
 </template>
@@ -11,30 +11,22 @@
 <script>
 import topPart from './TopPart.vue'
 import nearby from './Nearby.vue'
-import dockerPart from './DockerPart.vue'
 
 export default {
   name:'home',
   components: {
     topPart,
-    nearby,
-    dockerPart
+    nearby
   }
 }
 </script>
 
 <style lang = "scss" scoped>
 @import '../../style/variable.scss';
+@import '../../style/mixin.scss';
 .wrapper {
-    left: 0;
-    top: 0;
-    width: 100%;
-    position: absolute;
-    border-top: 1px solid $content_bgColor;
-    padding: 0 0.18rem;
-    box-sizing: border-box;
-    color: $content_fontColor;
-    bottom: 0.5rem;
+    @include wrapper;
     overflow-y: auto;
+    padding: 0 0.18rem;
 }
 </style>
