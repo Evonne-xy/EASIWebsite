@@ -22,7 +22,6 @@
       <div class="wrapper_login-link" @click="handleSignUp">Sign up</div>
     </div>
     <base-toast v-if="toastData.show">{{ toastData.error }}</base-toast>
-    <!-- <base-dialog></base-dialog> -->
   </div>
 </template>
 
