@@ -10,13 +10,13 @@ This is a mock EASI app and use the vue framework
 
 项目功能： 
 1. 登陆注册（当你进入界面时，会让你登录，登录输入任何用户名和密码都可以登录成功）
-   ![login](ReadmeImgs\logIn.png)
-   ![sinUp](ReadmeImgs\signUp.png)
+   ![login](./ReadmeImgs/logIn.png)
+   ![sinUp](./ReadmeImgs\signUp.png)
 
 
 2. 首页展示 
    进入首页后，会展示不同的商家页面，可以点击进去查看不同商家的商品，这里有商品内容商家分别为Costco,WoolWorths.
-   ![HomePage](ReadmeImgs\HomePage.png)
+   ![HomePage](./ReadmeImgs\HomePage.png)
 
 
 3. 商家页面
@@ -29,24 +29,26 @@ This is a mock EASI app and use the vue framework
 
    <3>用户选好后可以点击，checkOut，进入结账页面
 
-![shopDetail](ReadmeImgs\shopDetail.png)
-![shopDetail2](ReadmeImgs\shopDetail2.png)
+![shopDetail](./ReadmeImgs\shopDetail.png)
+![shopDetail2](./ReadmeImgs\shopDetail2.png)
 
 4. 结账页面
    结账页面会显示商品信息，和价格，用户可点击check out选择支付或者取消，如果用户选择支付，信息会post到后端，页面会跳转到order界面，显示order详情。
    由于使用的是fastMock平台，所以无法真实的post并且get到
 
-   ![orderComfirmation](ReadmeImgs\orderComfirmation.png)
-   ![orderComfirmation](ReadmeImgs\orderComfirmation2.png)
+   ![orderComfirmation](./ReadmeImgs\orderComfirmation.png)
+   ![orderComfirmation](./ReadmeImgs\orderComfirmation2.png)
 
 5. 购物车页面
     购物车可以显示你加入的商品，并且如果商品数量超过3个，会将商品隐藏起来，当用户点击后，会显示所以的商品
-![cartList](ReadmeImgs\cartList.png)
-![cartList2](ReadmeImgs\cartList2.png)
+![cartList](./ReadmeImgs\cartList.png)
+![cartList2](./ReadmeImgs\cartList2.png)
 
 
 以下为使用的接口信息：
  FastMock接口根地址：https://www.fastmock.site/mock/27a7a97298b45004b177ad4c492f30e6/EASI_shop
+
+ ```
 [{
   "name": "GetOrderList",
   "url": "/api/getOrder",
@@ -83,6 +85,7 @@ This is a mock EASI app and use the vue framework
   "method": "post",
   "on": true
 }]
+```
 ## Project setup
 ```
 npm install
